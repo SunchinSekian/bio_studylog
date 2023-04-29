@@ -10,7 +10,7 @@
         text-align: center;
     }
 
-    h3 {
+    h4 {
         text-align: center;
     }
     a:link{
@@ -23,8 +23,9 @@
 {% for i in data %}
 <div class="container p-5 my-5 border">
         <h2><a href="/detail/{{i[0]}}">{{i[1]}}</h2></a>
-        <h3>{{i[2]}}</h3>
-        <br>
+        <h4>{{i[2]}}</h4>
 </div>
 {% endfor %}
+{{ pagination.info }}
+{{ pagination.links }}
 {% endblock %}

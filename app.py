@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, request
+from flask_paginate import get_page_parameter, Pagination
 import sqlite3
 app = Flask(__name__)
 DATABASE = 'data.db'
@@ -14,7 +15,13 @@ def hello_world():
     finally:
         cur.close()
         conn.close()
-    return render_template('index.html', data=data)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = 10
+    pagination = Pagination(page=page, per_page=per_page, total=len(data), css_framework='bootstrap5')
+    start = (page - 1) * per_page
+    end = start + per_page
+    data = data[start:end]
+    return render_template('index.html', data=data,pagination=pagination)
 
 
 @app.route('/write', methods=["GET", "POST"])
@@ -66,11 +73,17 @@ def surprise():
 def tag():
     conn = sqlite3.connect(DATABASE)
     cur = conn.cursor()
-    cur.execute('select * from tag')
-    data = cur.fetchall()
+    cur.execute('select group_concat(entry.topic) as new,tag.name from entry inner join tag on entry.tag=tag.name GROUP by tag.name')
+    data=cur.fetchall()
     cur.close()
     conn.close()
-    return render_template('tags.html', data=data)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = 10
+    pagination = Pagination(page=page, per_page=per_page, total=len(data), css_framework='bootstrap5')
+    start = (page - 1) * per_page
+    end = start + per_page
+    data = data[start:end]
+    return render_template('tags.html', data=data,pagination=pagination)
 @app.route('/tags/<name>')
 def tdetail(name):
     conn = sqlite3.connect(DATABASE)
