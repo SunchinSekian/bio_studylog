@@ -1,0 +1,9 @@
+{%extends 'base.html'%}
+{%block title%}小坑类别{%endblock%}
+{%block body%}
+{%for i in data%}
+<div class="container">
+    <h2><a href="/tags/{{i[1]}}">{{i[1]}}</h2></a>
+</div>
+{%endfor%}
+{%endblock%}

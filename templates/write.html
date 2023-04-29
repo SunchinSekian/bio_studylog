@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{%block title%}编辑小坑{%endblock%}
+{%block body%}
+<style>
+    h1 {
+        text-align: center;
+    }
+
+    form {
+        text-align: center;
+    }
+
+    textarea {
+        min-height: 800px;
+    }
+</style>
+<h1>编辑小坑</h1>
+<div class="container mt-3">
+    <form action="" method="post">
+        标题: <input type="text" class="form-control" name="topic" required><br>
+        <label for="main">请输入详情：</label>
+        <textarea class="form-control" rows="5" id="main" name="main" required></textarea>
+        类别: <input type="text" class="form-control" name="tag"><br>
+        <button type="submit" class="btn btn-primary">提交</button>
+    </form>
+</div>
+{%endblock%}

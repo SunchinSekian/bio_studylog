@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}首页{% endblock %}
+{% block head %}
+<style>
+    h1 {
+        text-align: center;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    h3 {
+        text-align: center;
+    }
+    a:link{
+        
+    }
+</style>
+{% endblock %}
+{% block body %}
+<h1>属于大家的小坑不跳</h1>
+{% for i in data %}
+<div class="container p-5 my-5 border">
+        <h2><a href="/detail/{{i[0]}}">{{i[1]}}</h2></a>
+        <h3>{{i[2]}}</h3>
+        <br>
+</div>
+{% endfor %}
+{% endblock %}
