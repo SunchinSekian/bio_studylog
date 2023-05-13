@@ -1,0 +1,25 @@
+<div class="rellax" data-rellax-percentage="0.5">
+  I’m that default chill speed of "-2" and "centered"
+</div>
+<div class="rellax" data-rellax-speed="7" data-rellax-percentage="0.5">
+  I’m super fast!! And super centered!!
+</div>
+<div class="rellax" data-rellax-speed="-4" data-rellax-percentage="0.5">
+  I’m extra slow and smooth, and hella centered.
+</div>
+<div class="rellax" data-rellax-speed="7" data-rellax-xs-speed="-5" data-rellax-mobile-speed="3" data-rellax-tablet-speed="-8" data-rellax-desktop-speed="1">
+  I parallax at all different speeds depending on your screen width.
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/dixonandmoe/rellax@master/rellax.min.js"></script>
+<script>
+  // Also can pass in optional settings block
+  var rellax = new Rellax('.rellax', {
+    speed: -2,
+    center: false,
+    wrapper: null,
+    round: true,
+    vertical: true,
+    horizontal: false
+  });
+</script>

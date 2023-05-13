@@ -1,10 +1,10 @@
-{%extends 'base.html'%}
-{%block title%}小坑类别{%endblock%}
+{% extends 'base.html' %}
+{% block title%}{{name}}类别{%endblock%}
 {%block body%}
-<h1>类别大全</h1>
+<h1>{{name}}下的所有小坑</h1>
 {%for i in data%}
 <div class="container p-5 my-5 border animate__animated animate__fadeInUp">
-    <h2><a href="/tags/{{i[1]}}">{{i[1]}}</h2></a>
+    <h2><a href="/detail/{{i[0]}}">{{i[1]}}</h2></a>
     <h3>{{i[0]}}</h3>
 </div>
 {%endfor%}

@@ -1,8 +1,20 @@
 from flask import Flask, render_template, redirect, request
 from flask_paginate import get_page_parameter, Pagination
+
 import sqlite3
 app = Flask(__name__)
 DATABASE = 'data.db'
+
+
+def generate_page(data):
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = 10
+    pagination = Pagination(page=page, per_page=per_page,
+                            total=len(data), css_framework='bootstrap5')
+    start = (page - 1) * per_page
+    end = start + per_page
+    data = data[start:end]
+    return (pagination)
 
 
 @app.route("/")
@@ -15,13 +27,8 @@ def hello_world():
     finally:
         cur.close()
         conn.close()
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    per_page = 10
-    pagination = Pagination(page=page, per_page=per_page, total=len(data), css_framework='bootstrap5')
-    start = (page - 1) * per_page
-    end = start + per_page
-    data = data[start:end]
-    return render_template('index.html', data=data,pagination=pagination)
+    pagination = generate_page(data)
+    return render_template('index.html', data=data, pagination=pagination)
 
 
 @app.route('/write', methods=["GET", "POST"])
@@ -73,35 +80,42 @@ def surprise():
 def tag():
     conn = sqlite3.connect(DATABASE)
     cur = conn.cursor()
-    cur.execute('select group_concat(entry.topic) as new,tag.name from entry inner join tag on entry.tag=tag.name GROUP by tag.name')
-    data=cur.fetchall()
+    cur.execute(
+        'select group_concat(entry.topic) as new,tag.name from entry inner join tag on entry.tag=tag.name GROUP by tag.name')
+    data = cur.fetchall()[::-1]
     cur.close()
     conn.close()
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    per_page = 10
-    pagination = Pagination(page=page, per_page=per_page, total=len(data), css_framework='bootstrap5')
-    start = (page - 1) * per_page
-    end = start + per_page
-    data = data[start:end]
-    return render_template('tags.html', data=data,pagination=pagination)
+    pagination = generate_page(data)
+    return render_template('tags.html', data=data, pagination=pagination)
+
+
 @app.route('/tags/<name>')
 def tdetail(name):
     conn = sqlite3.connect(DATABASE)
     cur = conn.cursor()
-    cur.execute(f'select * from entry where tag={name}')
+    cur.execute('select * from entry where tag=?', (name,))
     data = cur.fetchall()
+    print(data)
     cur.close()
     conn.close()
-    return str(data)
+    pagination = generate_page(data)
+    return render_template('tags_detail.html', data=data, pagination=pagination,name=name)
+
+
 @app.route('/api')
 def api():
     conn = sqlite3.connect(DATABASE)
     cur = conn.cursor()
     cur.execute('SELECT * FROM entry ORDER BY RANDOM() limit 1')
-    data = cur.fetchall()
+    data = cur.fetchall()[0]
     cur.close()
     conn.close()
-    return str(data)
-    
+    rdata = {}
+    rdata['id'] = data[0]
+    rdata['title'] = data[1]
+    rdata['main'] = data[2]
+    return rdata
+
+
 if __name__ == '__main__':
     app.run('0.0.0.0', debug=True)
