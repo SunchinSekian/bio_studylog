@@ -3,7 +3,7 @@ from flask_paginate import get_page_parameter, Pagination
 
 import sqlite3
 app = Flask(__name__)
-DATABASE = 'data.db'
+DATABASE = 'data.sqlite'
 
 
 def generate_page(data):
@@ -28,6 +28,7 @@ def hello_world():
         cur.close()
         conn.close()
     pagination = generate_page(data)
+    print(data)
     return render_template('index.html', data=data, pagination=pagination)
 
 
@@ -116,6 +117,10 @@ def api():
     rdata['main'] = data[2]
     return rdata
 
-
+@app.route('/question',methods=["GET", "POST"])
+def ques():
+    if request.method=='GET':
+        return 'hello world'
+    
 if __name__ == '__main__':
     app.run('0.0.0.0', debug=True)

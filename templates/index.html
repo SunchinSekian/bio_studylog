@@ -6,7 +6,7 @@
 <h1 >属于大家的小坑不跳</h1>
 {% for i in data %}
 <div class="container p-5 my-5 border animate__animated animate__fadeInUp">
-        <h2 class="puddletitle"><a href="/detail/{{i[0]}}">{{i[1]}}</h2></a>
+        <h2 class="puddletitle"><a href="/detail/{{i[0]}}">{{i[1]}}<span class="badge bg-primary">{{i[3]}}</span> </h2></a>
         <h4>{{i[2]}}</h4>
 </div>
 {% endfor %}
